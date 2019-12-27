@@ -31,7 +31,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
           <button type="button" class="btn btn-primary" (click)="modal.close('Save click')">Close</button>
       </div>
   </ng-template>
-  <div *ngIf="!showbutton">
+  <div *ngIf="!showbutton && !shouldpop ">
       <agm-map appAppDirectionsMap [showDirection]="this.displayDirections" [origin]="origin"
           [destination]="destination" [zoom]="zoom" [disableDefaultUI]="false" [zoomControl]="false">
 
@@ -40,7 +40,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
       </agm-map>
   </div>
   <div *ngIf="showbutton">
-      <button class="btn btn-primary" (click)="open(content)">Location</button>
+      <button class="btn btn-primary" id="map-opener" (click)="open(content)">Location</button>
   </div>
  
 </div>`,
@@ -48,6 +48,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 export class LocationComponent implements OnInit, OnChanges, AfterViewInit {
   @Input() public simulating: string;
+  @Input() public shouldpop: any;
 
   constructor(private modalService: NgbModal, private http: HttpClient) {
 
@@ -105,7 +106,7 @@ export class LocationComponent implements OnInit, OnChanges, AfterViewInit {
 
 
   displayDirections = true;
-  zoom = 14;
+  zoom = 10;
 
   ngOnInit() {
     this.destination = {
@@ -132,6 +133,11 @@ export class LocationComponent implements OnInit, OnChanges, AfterViewInit {
     } else {
       console.log("simulating");
     }
+    if (this.shouldpop === "true" || this.shouldpop === true) {
+
+      let element: HTMLElement = document.getElementById("map-opener") as HTMLElement;
+      element.click();
+    }
 
   }
 
@@ -143,8 +149,8 @@ export class LocationComponent implements OnInit, OnChanges, AfterViewInit {
 
   public callgridAuth() {
     let url = null;
-    return this.http.get<any>(this.url + "/grid_auth?auth=" + this.auth + "&gridCode=" + this.grid + "&Countrycode=" + this.country, this.httpOptions).subscribe(response => {
-      console.log(response);
+    return this.http.get<any>(this.url + "/PartnerGridSearch?gridCode=" + this.grid + "&Countrycode=" + this.country, this.httpOptions).subscribe(response => {
+
       url = response.GoogleMapURL;
       url.split("?q=")[1].split(",");
       this.destination = {
