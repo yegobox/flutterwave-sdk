@@ -141,15 +141,16 @@ export class LocationComponent implements OnInit, OnChanges, AfterViewInit {
 
   }
 
-  httpOptions = {
-    headers: new HttpHeaders({
-      'Content-Type': 'application/json'
-    })
-  };
-
   public callgridAuth() {
     let url = null;
-    return this.http.get<any>(this.url + "/PartnerGridSearch?gridCode=" + this.grid + "&Countrycode=" + this.country, this.httpOptions).subscribe(response => {
+    let a = this.auth;
+    return this.http.get<any>(this.url + "/partnergridsearch?gridCode=" + this.grid + "&Countrycode=" + this.country, {
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+        'Accept': 'application/json',
+        'Authorization': `Basic ${a}`
+      }
+    }).subscribe(response => {
 
       url = response.GoogleMapURL;
       url.split("?q=")[1].split(",");
