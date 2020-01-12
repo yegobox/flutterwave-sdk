@@ -19,6 +19,7 @@ export class AppDirectionsMapDirective implements OnInit, OnChanges {
   @Input() origin: ILatLng;
   @Input() destination: ILatLng;
   @Input() showDirection: boolean;
+  @Input() zoom: number;
 
   // We'll keep a single google maps directions renderer instance so we get to reuse it.
   // using a new renderer instance every time will leave the previous one still active and visible on the page
@@ -42,17 +43,34 @@ export class AppDirectionsMapDirective implements OnInit, OnChanges {
       const directionsRenderer = this.directionsRenderer;
 
       if (this.showDirection && this.destination) {
+
+
         const directionsService = new google.maps.DirectionsService;
+        var myOptions = {
+          zoom: this.zoom,
+          minZoom:8,
+          maxZoom:this.zoom,
+          zoomControl:false,
+          disableDefaultUI: true,
+          center: new google.maps.LatLng(this.origin.latitude, this.origin.longitude),
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        map.setOptions(myOptions);   
+      
         directionsRenderer.setMap(map);
         directionsService.route({
           origin: { lat: this.origin.latitude, lng: this.origin.longitude },
           destination: { lat: this.destination.latitude, lng: this.destination.longitude },
           waypoints: [],
-          optimizeWaypoints: true,
+          avoidHighways: true,
           travelMode: 'DRIVING'
         }, (response, status) => {
           if (status === 'OK') {
+            console.log(map.getZoom());
+            console.log(map.getCenter());
+            // console.log(response);
             directionsRenderer.setDirections(response);
+            map.setZoom(this.zoom);
             // If you'll like to display an info window along the route
             // middleStep is used to estimate the midpoint on the route where the info window will appear
             // const middleStep = (response.routes[0].legs[0].steps.length / 2).toFixed();

@@ -21,7 +21,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
       </div>
       <div class="modal-body">
           <agm-map appAppDirectionsMap [showDirection]="this.displayDirections" [origin]="origin"
-              [destination]="destination" [zoom]="zoom" [disableDefaultUI]="false" [zoomControl]="false">
+              [destination]="destination" [zoom]="_zoom" [disableDefaultUI]="false" [zoomControl]="false">
 
               <agm-marker [latitude]="origin.latitude" [longitude]="origin.longitude">
               </agm-marker>
@@ -33,7 +33,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
   </ng-template>
   <div *ngIf="!showbutton && !shouldpop ">
       <agm-map appAppDirectionsMap [showDirection]="this.displayDirections" [origin]="origin"
-          [destination]="destination" [zoom]="zoom" [disableDefaultUI]="false" [zoomControl]="false">
+          [destination]="destination" [zoom]="_zoom" [disableDefaultUI]="false" [zoomControl]="false">
 
           <agm-marker [latitude]="origin.latitude" [longitude]="origin.longitude">
           </agm-marker>
@@ -97,25 +97,27 @@ export class LocationComponent implements OnInit, OnChanges, AfterViewInit {
   };
 
   //origin
-  @Input() orglatitude: any;
-  @Input() orglongitude: any;
+  @Input() orglatitude: any=-1.9545556;
+  @Input() orglongitude: any=30.0938534;
   //destination
-  @Input() destlatitude: any;
-  @Input() destlongitude: any;
+  @Input() destlatitude: any=-1.9545556;
+  @Input() destlongitude: any=30.0938534;
 
+  _zoom:number;
+  @Input() zoom:any=13;
 
 
   displayDirections = true;
-  zoom = 10;
 
   ngOnInit() {
     this.destination = {
       latitude: this.destlatitude,
       longitude: this.destlongitude
     } as ILatLng;
+    this._zoom=parseInt(this.zoom);
   }
   ngAfterViewInit(): void {
-
+    this._zoom=parseInt(this.zoom);
     this.destination = {
       latitude: parseFloat(this.destlatitude),
       longitude: parseFloat(this.destlongitude)
@@ -132,6 +134,7 @@ export class LocationComponent implements OnInit, OnChanges, AfterViewInit {
       this.callgridAuth();
     } else {
       console.log("simulating");
+      console.log('zoom', this.zoom);
     }
     if (this.shouldpop === "true" || this.shouldpop === true) {
 
