@@ -48,15 +48,15 @@ export class AppDirectionsMapDirective implements OnInit, OnChanges {
         const directionsService = new google.maps.DirectionsService;
         var myOptions = {
           zoom: this.zoom,
-          minZoom:8,
-          maxZoom:this.zoom,
-          zoomControl:false,
+          minZoom: 8,
+          maxZoom: this.zoom,
+          zoomControl: false,
           disableDefaultUI: true,
           center: new google.maps.LatLng(this.origin.latitude, this.origin.longitude),
           mapTypeId: google.maps.MapTypeId.ROADMAP
         };
-        map.setOptions(myOptions);   
-      
+        map.setOptions(myOptions);
+
         directionsRenderer.setMap(map);
         directionsService.route({
           origin: { lat: this.origin.latitude, lng: this.origin.longitude },
@@ -66,8 +66,8 @@ export class AppDirectionsMapDirective implements OnInit, OnChanges {
           travelMode: 'DRIVING'
         }, (response, status) => {
           if (status === 'OK') {
-            console.log(map.getZoom());
-            console.log(map.getCenter());
+            // console.log(map.getZoom());
+            // console.log(map.getCenter());
             // console.log(response);
             directionsRenderer.setDirections(response);
             map.setZoom(this.zoom);

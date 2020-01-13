@@ -97,14 +97,14 @@ export class LocationComponent implements OnInit, OnChanges, AfterViewInit {
   };
 
   //origin
-  @Input() orglatitude: any=-1.9545556;
-  @Input() orglongitude: any=30.0938534;
+  @Input() orglatitude: any;
+  @Input() orglongitude: any;
   //destination
-  @Input() destlatitude: any=-1.9545556;
-  @Input() destlongitude: any=30.0938534;
+  @Input() destlatitude: any;
+  @Input() destlongitude: any;
 
-  _zoom:number;
-  @Input() zoom:any=13;
+  _zoom: number;
+  @Input() zoom: any = 13;
 
 
   displayDirections = true;
@@ -114,10 +114,10 @@ export class LocationComponent implements OnInit, OnChanges, AfterViewInit {
       latitude: this.destlatitude,
       longitude: this.destlongitude
     } as ILatLng;
-    this._zoom=parseInt(this.zoom);
+    this._zoom = parseInt(this.zoom);
   }
   ngAfterViewInit(): void {
-    this._zoom=parseInt(this.zoom);
+    this._zoom = parseInt(this.zoom);
     this.destination = {
       latitude: parseFloat(this.destlatitude),
       longitude: parseFloat(this.destlongitude)
