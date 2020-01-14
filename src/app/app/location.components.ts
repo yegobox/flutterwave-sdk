@@ -6,13 +6,27 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 @Component({
   selector: 'location-button',
   styles: [`
+  .preview{
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    overflow: hidden;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    background:#fff;
+  }
   agm-map {
-    height: 300px;
+    height: 70vh;
   }
 `],
   template: `
 <div *ngIf="url">
   <ng-template #content let-modal>
+  <div class="animated bounceIn" [class.preview]="preview"  tabindex="-1">
       <div class="modal-header">
           <h4 class="modal-title" id="modal-basic-title">Map</h4>
           <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
@@ -28,7 +42,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
           </agm-map>
       </div>
       <div class="modal-footer">
+         <button type="button" class="btn btn-info" (click)="togglePreview()">Zoom {{preview?'Out':'In'}}</button>
           <button type="button" class="btn btn-primary" (click)="modal.close('Save click')">Close</button>
+      </div>
       </div>
   </ng-template>
   <div *ngIf="!showbutton && !shouldpop ">
@@ -53,7 +69,7 @@ export class LocationComponent implements OnInit, OnChanges, AfterViewInit {
   constructor(private modalService: NgbModal, private http: HttpClient) {
 
   }
-
+  preview:boolean=false;
   @Input()
   public name: string;
 
@@ -80,7 +96,9 @@ export class LocationComponent implements OnInit, OnChanges, AfterViewInit {
   public size: number = 1;
 
   @Input() showMapByDefault = true;
-
+  togglePreview(){
+    this.preview=!this.preview;
+  }
   open(content) {
     this.modalService.open(content, { ariaLabelledBy: 'grid-map', size: 'lg' }).result.then((result) => {
     }, (reason) => {
