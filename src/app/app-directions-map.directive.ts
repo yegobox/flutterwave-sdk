@@ -50,9 +50,9 @@ export class AppDirectionsMapDirective implements OnInit, OnChanges {
           zoom: this.zoom,
           minZoom: 8,
           maxZoom: this.zoom,
-          zoomControl: false,
+          zoomControl: true,
           disableDefaultUI: true,
-          center: new google.maps.LatLng(this.origin.latitude, this.origin.longitude),
+          center: new google.maps.LatLng(this.destination.latitude, this.destination.longitude),
           mapTypeId: google.maps.MapTypeId.ROADMAP
         };
         map.setOptions(myOptions);
