@@ -8,6 +8,8 @@ import { LocationComponent } from './app/location.components';
 import { createCustomElement } from '@angular/elements';
 import { HttpClientModule } from '@angular/common/http';
 import {FlipperPaymentCardModule} from '@enexus/payment-card';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+
 
 @NgModule({
   imports: [BrowserModule, 
@@ -15,6 +17,7 @@ import {FlipperPaymentCardModule} from '@enexus/payment-card';
     BrowserAnimationsModule, 
     HttpClientModule,
     FlipperPaymentCardModule, 
+    MatSnackBarModule,
     AgmCoreModule.forRoot({
     apiKey: 'AIzaSyDJ-10ywLsARBlXZnKxnKrc2eHIlwl0YVg'
   })

@@ -6,6 +6,9 @@
         </button>
     </div>
     <div class="modal-body">
+        <div *ngIf="noAmountError" style="margin-left:140px;">
+            <p >You need to set amount to pay</p>
+        </div>
         <flipper-payment-card app="App Name" 
         [showCard]="showCard" 
         [currency]="currency" 

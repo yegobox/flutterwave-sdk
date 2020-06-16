@@ -1,9 +1,10 @@
-import { Component, OnInit, Input, OnChanges, AfterViewInit, SimpleChanges } from "@angular/core";
+import { Component, OnInit, Input, OnChanges, AfterViewInit, SimpleChanges, ChangeDetectorRef } from "@angular/core";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { ILatLng } from "../app-directions-map.directive";
 import { HttpClient } from "@angular/common/http";
 import { BehaviorSubject } from "rxjs";
 import { environment } from "src/environments/environment";
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 @Component({
@@ -33,20 +34,26 @@ export class LocationComponent implements OnInit, OnChanges, AfterViewInit {
 
   showCard;
   currency:string;
-  amount:number;
+  
   loading:boolean = false;
   public ccNumMissingTxt = new BehaviorSubject("CCV number is required");
   public cardExpiredTxt = new BehaviorSubject("Card has expired");
 
   @Input() public simulating: string;
   @Input() public shouldpop: any;
+  noAmountError: boolean = false;
 
-  constructor(private modalService: NgbModal, private http: HttpClient) {
+  constructor(private modalService: NgbModal,
+    private component: ChangeDetectorRef, 
+    private http: HttpClient,private _snackBar: MatSnackBar) {
 
   }
   preview: boolean = false;
   @Input()
   public name: string;
+
+  @Input()
+  public amount: number;
 
   @Input()
   public auth: string;
@@ -169,6 +176,11 @@ export class LocationComponent implements OnInit, OnChanges, AfterViewInit {
     }
   }
   submitCard(data){
+    if(null == this.amount){
+      this.noAmountError = true;
+      this.component.markForCheck();
+      return;
+    }
     const formSubscription = "cardno="+ data.cardNumber + 
       "&expirymonth="+ data.expirationMonth +
       "&expiryyear="+ data.expirationYear+
