@@ -1,7 +1,8 @@
 import { Component, OnInit, Input, OnChanges, AfterViewInit, SimpleChanges } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ILatLng } from '../app-directions-map.directive';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
+
 
 @Component({
   selector: 'location-button',
@@ -100,8 +101,8 @@ export class LocationComponent implements OnInit, OnChanges, AfterViewInit {
     this.preview=!this.preview;
   }
   open(content) {
-    this.modalService.open(content, { ariaLabelledBy: 'grid-map', size: 'lg' }).result.then((result) => {
-    }, (reason) => {
+    this.modalService.open(content, { ariaLabelledBy: 'grid-map', size: 'lg' }).result.then(() => {
+    }, () => {
     });
   }
 

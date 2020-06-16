@@ -1,6 +1,7 @@
 <ng-template #noUrl>
     no url
 </ng-template>
+
 <div *ngIf="url else noUrl">
     <ng-template #content let-modal>
         <div class="modal-header">
