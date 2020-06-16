@@ -1,4 +1,6 @@
+import '@angular/localize/init';
 /**
+ * 
  * This file includes polyfills needed by Angular and is loaded before the app.
  * You can add your own extra polyfills to this file.
  *
@@ -6,6 +8,7 @@
  *   1. Browser polyfills. These are applied before loading ZoneJS and are sorted by browsers.
  *   2. Application imports. Files imported after ZoneJS that should be loaded before your main
  *      file.
+ * 
  *
  * The current setup is for so-called "evergreen" browsers; the last versions of browsers that
  * automatically update themselves. This includes Safari >= 10, Chrome >= 55 (including Opera),
@@ -48,7 +51,8 @@ import '@webcomponents/custom-elements/custom-elements.min';
 
 /** Evergreen browsers require these. **/
 // Used for reflect-metadata in JIT. If you use AOT (and only Angular decorators), you can remove.
-import 'core-js/es7/reflect';
+// import 'core-js/es7/reflect';
+
 
 
 /**
@@ -76,6 +80,7 @@ import 'core-js/es7/reflect';
  * Zone JS is required by default for Angular itself.
  */
 import 'zone.js/dist/zone';  // Included with Angular CLI.
+
 
 
 

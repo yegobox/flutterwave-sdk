@@ -1,0 +1,23 @@
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Make payment</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <flipper-payment-card app="App Name" 
+        [showCard]="showCard" 
+        [currency]="currency" 
+        [amount]="flipperPlan"
+            (formSaved)="submitCard($event)" 
+            [loading]="(loading | async)" 
+            [ccNumMissingTxt]="(ccNumMissingTxt | async)"
+            [cardExpiredTxt]="(cardExpiredTxt | async)"> 
+        </flipper-payment-card>
+    </div>
+</ng-template>
+
+<div *ngIf="showbutton">
+    <button class="btn btn-primary" id="map-opener" (click)="open(content)">Pay now</button>
+</div>

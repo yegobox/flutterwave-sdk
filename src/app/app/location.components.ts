@@ -1,11 +1,13 @@
-import { Component, OnInit, Input, OnChanges, AfterViewInit, SimpleChanges } from '@angular/core';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ILatLng } from '../app-directions-map.directive';
-import { HttpClient } from '@angular/common/http';
+import { Component, OnInit, Input, OnChanges, AfterViewInit, SimpleChanges } from "@angular/core";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { ILatLng } from "../app-directions-map.directive";
+import { HttpClient } from "@angular/common/http";
+import { BehaviorSubject } from "rxjs";
+import { environment } from "src/environments/environment";
 
 
 @Component({
-  selector: 'location-button',
+  selector: "payment-sdk",
   styles: [`
   .preview{
     position: fixed;
@@ -24,53 +26,25 @@ import { HttpClient } from '@angular/common/http';
     height: 70vh;
   }
 `],
-  template: `
-<div *ngIf="url">
-  <ng-template #content let-modal>
-  <div class="animated bounceIn" [class.preview]="preview"  tabindex="-1">
-      <div class="modal-header">
-          <h4 class="modal-title" id="modal-basic-title">Map</h4>
-          <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-              <span aria-hidden="true">&times;</span>
-          </button>
-      </div>
-      <div class="modal-body">
-          <agm-map appAppDirectionsMap [showDirection]="this.displayDirections" [origin]="origin"
-              [destination]="destination" [zoom]="_zoom" [disableDefaultUI]="false" [zoomControl]="false">
-
-              <agm-marker [latitude]="origin.latitude" [longitude]="origin.longitude">
-              </agm-marker>
-          </agm-map>
-      </div>
-      <div class="modal-footer">
-         <button type="button" class="btn btn-info" (click)="togglePreview()">Zoom {{preview?'Out':'In'}}</button>
-          <button type="button" class="btn btn-primary" (click)="modal.close('Save click')">Close</button>
-      </div>
-      </div>
-  </ng-template>
-  <div *ngIf="!showbutton && !shouldpop ">
-      <agm-map appAppDirectionsMap [showDirection]="this.displayDirections" [origin]="origin"
-          [destination]="destination" [zoom]="_zoom" [disableDefaultUI]="false" [zoomControl]="false">
-
-          <agm-marker [latitude]="origin.latitude" [longitude]="origin.longitude">
-          </agm-marker>
-      </agm-map>
-  </div>
-  <div *ngIf="showbutton">
-      <button class="btn btn-primary" id="map-opener" (click)="open(content)">Location</button>
-  </div>
- 
-</div>`,
+  templateUrl:"payment.html",
 
 })
 export class LocationComponent implements OnInit, OnChanges, AfterViewInit {
+
+  showCard;
+  currency:string;
+  amount:number;
+  loading:boolean = false;
+  public ccNumMissingTxt = new BehaviorSubject("CCV number is required");
+  public cardExpiredTxt = new BehaviorSubject("Card has expired");
+
   @Input() public simulating: string;
   @Input() public shouldpop: any;
 
   constructor(private modalService: NgbModal, private http: HttpClient) {
 
   }
-  preview:boolean=false;
+  preview: boolean = false;
   @Input()
   public name: string;
 
@@ -91,17 +65,17 @@ export class LocationComponent implements OnInit, OnChanges, AfterViewInit {
 
 
   @Input()
-  public color: string = 'red';
+  public color: string = "red";
 
   @Input()
   public size: number = 1;
 
   @Input() showMapByDefault = true;
-  togglePreview(){
-    this.preview=!this.preview;
+  togglePreview() {
+    this.preview = !this.preview;
   }
   open(content) {
-    this.modalService.open(content, { ariaLabelledBy: 'grid-map', size: 'lg' }).result.then(() => {
+    this.modalService.open(content, { ariaLabelledBy: "grid-map", size: "lg" }).result.then(() => {
     }, () => {
     });
   }
@@ -150,10 +124,11 @@ export class LocationComponent implements OnInit, OnChanges, AfterViewInit {
     //call grid auth to overwride the destination passed when testing.
     if (this.simulating != "true") {
       console.log("not simulating");
-      this.callgridAuth();
+
+      // this.callgridAuth();
     } else {
       console.log("simulating");
-      console.log('zoom', this.zoom);
+      console.log("zoom", this.zoom);
     }
     if (this.shouldpop === "true" || this.shouldpop === true) {
 
@@ -164,27 +139,27 @@ export class LocationComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   public callgridAuth() {
-    let url = null;
-    let a = this.auth;
-    return this.http.get<any>(this.url + "/partnergridsearch?gridCode=" + this.grid + "&Countrycode=" + this.country, {
-      headers: {
-        'Content-Type': 'application/json; charset=utf-8',
-        'Accept': 'application/json',
-        'Authorization': `Basic ${a}`
-      }
-    }).subscribe(response => {
 
-      url = response.GoogleMapURL;
-      url.split("?q=")[1].split(",");
-      this.destination = {
-        latitude: parseFloat(url.split("?q=")[1].split(",")[0]),
-        longitude: parseFloat(url.split("?q=")[1].split(",")[1])
-      } as ILatLng
-    });
+    // TODO: call yegobox to save the location for user making payment when necessary.
+    // let url = null;
+    // let a = this.auth;
+    // return this.http.get<any>(this.url + "/partnergridsearch?gridCode=" + this.grid + "&Countrycode=" + this.country, {
+    //   headers: {
+    //     "Content-Type": "application/json; charset=utf-8",
+    //     "Accept": "application/json",
+    //     "Authorization": `Basic ${a}`
+    //   }
+    // }).subscribe(response => {
+
+    //   url = response.GoogleMapURL;
+    //   url.split("?q=")[1].split(",");
+    //   this.destination = {
+    //     latitude: parseFloat(url.split("?q=")[1].split(",")[0]),
+    //     longitude: parseFloat(url.split("?q=")[1].split(",")[1])
+    //   } as ILatLng
+    // });
   }
-
   ngOnChanges(changes: SimpleChanges): void {
-
     this.destination = {
       latitude: this.destlatitude,
       longitude: this.destlongitude
@@ -192,5 +167,42 @@ export class LocationComponent implements OnInit, OnChanges, AfterViewInit {
 
     if (changes.origin) {
     }
+  }
+  submitCard(data){
+    const formSubscription = "cardno="+ data.cardNumber + 
+      "&expirymonth="+ data.expirationMonth +
+      "&expiryyear="+ data.expirationYear+
+      "&vcc="+ data.ccv+
+      "&email="+ "email@gmail.com"+
+      "&firstname="+ data.cardHolder+
+      "&lastname="+ data.cardHolder+
+      "&planid="+ "5422"+
+      "&appname="+ "FLIPPER"+
+      "&phone="+ "07888888888"+
+      "&transactionid="+ Date.now()+
+      "&amount="+ "400"+
+      "&pay_type="+ "CARD"+
+      "&userId="+ "1";
+
+    let xhr = new XMLHttpRequest();
+    
+
+
+    xhr.open("POST", environment.paymentUrl+"charge", true);
+
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+    xhr.onload = (d) => {
+
+      // let json = JSON.parse(xhr.response);
+      console.log("payment response ....",xhr.response);
+      
+    };
+
+    
+
+    xhr.send(formSubscription);
+
+    console.log(formSubscription);
   }
 }

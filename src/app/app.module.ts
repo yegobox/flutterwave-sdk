@@ -7,28 +7,28 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { LocationComponent } from './app/location.components';
 import { createCustomElement } from '@angular/elements';
 import { HttpClientModule } from '@angular/common/http';
+import {FlipperPaymentCardModule} from '@enexus/payment-card';
 
 @NgModule({
-  imports: [BrowserModule, NgbModule, BrowserAnimationsModule, HttpClientModule, AgmCoreModule.forRoot({
+  imports: [BrowserModule, 
+    NgbModule, 
+    BrowserAnimationsModule, 
+    HttpClientModule,
+    FlipperPaymentCardModule, 
+    AgmCoreModule.forRoot({
     apiKey: 'AIzaSyDJ-10ywLsARBlXZnKxnKrc2eHIlwl0YVg'
-  })],
+  })
+],
   providers: [],
   declarations: [AppDirectionsMapDirective, LocationComponent],
-  // bootstrap: [AppComponent],
   entryComponents: [LocationComponent],
 })
 
 export class AppModule {
-  // constructor(injector: Injector) {
-  //   // Convert `PopupComponent` to a custom element.
-  //   const PopupElement = createCustomElement(LocationComponent, { injector });
-  //   // Register the custom element with the browser.
-  //   // customElements.whenDefined
-  //   customElements.define('location-buttons', PopupElement);
-  // }
+
   constructor(private injector: Injector) {
     const customElement = createCustomElement(LocationComponent, { injector });
-    customElements.define('locations-button', customElement);
+    customElements.define('payment-sdk', customElement);
   }
   ngDoBootstrap() { }
 }
