@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, AfterViewInit, SimpleChanges, ChangeDetectorRef } from "@angular/core";
+import { Component, OnInit, Input, OnChanges, AfterViewInit, SimpleChanges, ChangeDetectorRef, ViewEncapsulation } from "@angular/core";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { ILatLng } from "../app-directions-map.directive";
 import { HttpClient } from "@angular/common/http";
@@ -6,34 +6,17 @@ import { BehaviorSubject } from "rxjs";
 import { environment } from "src/environments/environment";
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-
 @Component({
   selector: "payment-sdk",
-  styles: [`
-  .preview{
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    overflow: hidden;
-    margin: 0;
-    width: 100%;
-    height: 100%;
-    padding: 0;
-    background:#fff;
-  }
-  agm-map {
-    height: 70vh;
-  }
-`],
+  styleUrls:['style.scss'],
   templateUrl:"payment.html",
-
+  encapsulation: ViewEncapsulation.ShadowDom
 })
 export class LocationComponent implements OnInit, OnChanges, AfterViewInit {
 
   showCard;
   currency:string;
+  
   
   loading:boolean = false;
   public ccNumMissingTxt = new BehaviorSubject("CCV number is required");
@@ -66,6 +49,12 @@ export class LocationComponent implements OnInit, OnChanges, AfterViewInit {
 
   @Input()
   public showbutton: boolean = false;
+
+  @Input() 
+  public displayText: string = "Donate Now";
+
+  @Input()
+  public action:string = "dd";
 
   @Input()
   public url: string;
@@ -110,6 +99,7 @@ export class LocationComponent implements OnInit, OnChanges, AfterViewInit {
   displayDirections = true;
 
   ngOnInit() {
+    
     this.destination = {
       latitude: this.destlatitude,
       longitude: this.destlongitude
@@ -117,6 +107,8 @@ export class LocationComponent implements OnInit, OnChanges, AfterViewInit {
     this._zoom = parseInt(this.zoom);
   }
   ngAfterViewInit(): void {
+    console.log(this.action);
+
     this._zoom = parseInt(this.zoom);
     this.destination = {
       latitude: parseFloat(this.destlatitude),
@@ -142,7 +134,6 @@ export class LocationComponent implements OnInit, OnChanges, AfterViewInit {
       let element: HTMLElement = document.getElementById("map-opener") as HTMLElement;
       element.click();
     }
-
   }
 
   public callgridAuth() {

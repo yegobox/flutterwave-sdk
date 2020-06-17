@@ -22,5 +22,5 @@
 </ng-template>
 
 <div *ngIf="showbutton">
-    <button class="btn btn-primary" id="map-opener" (click)="open(content)">Pay now</button>
+    <button class="btn btn-primary" id="map-opener" (click)="open(content)">{{action}} {{amount|currency:'RWF'}}</button>
 </div>
