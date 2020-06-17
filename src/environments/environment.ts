@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  paymentUrl:'https://mysterious-depths-19225.herokuapp.com/'
+  paymentUrl:'https://decidex-dev.herokuapp.com/'
+
 };
 
 /*
