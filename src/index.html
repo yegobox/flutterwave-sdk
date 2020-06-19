@@ -9,12 +9,16 @@
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
+<style>
+  .button1{
+    background-color: brown;
+  }
+</style>
+<body class="mat-typography" style="margin:200px">
 
-<body class="mat-typography">
-
-  <payment-sdk showbutton='true' 
+  <payment-sdk  showbutton='false' modal="md" 
   amount='400' 
-  action='Donate Now'
+  action='Donate' 
   ></payment-sdk>
 </body>
 

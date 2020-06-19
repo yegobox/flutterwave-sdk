@@ -14,6 +14,12 @@ import {MatExpansionModule} from '@angular/material/expansion';
 import {MatCardModule} from '@angular/material/card';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { PaymentSdkComponent } from './payment-sdk/payment-sdk.component';
+import { PaymentSdkModalComponent } from './payment-sdk-modal/payment-sdk-modal.component';
+import { DialogModule } from '@enexus/flipper-dialog';
+import { PaymentComponent } from './payment/payment.component';
+import { MatInputModule } from '@angular/material/input'
+import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator.component';
 
 @NgModule({
   imports: [BrowserModule, 
@@ -27,21 +33,28 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     MatCardModule,
     ReactiveFormsModule,
     MatSlideToggleModule,
+    MatInputModule,
+    DialogModule,
     MatSnackBarModule,
     AgmCoreModule.forRoot({
     apiKey: 'AIzaSyDJ-10ywLsARBlXZnKxnKrc2eHIlwl0YVg'
   })
 ],
   providers: [],
-  declarations: [AppDirectionsMapDirective, LocationComponent],
-  entryComponents: [LocationComponent],
+  declarations: [AppDirectionsMapDirective, 
+    LoadingIndicatorComponent,
+    LocationComponent, 
+    PaymentSdkComponent,
+     PaymentSdkModalComponent, 
+     PaymentComponent],
+  entryComponents: [PaymentSdkModalComponent],
 })
 
 export class AppModule {
 
 
   constructor(private injector: Injector) {
-    const customElement = createCustomElement(LocationComponent, { injector });
+    const customElement = createCustomElement(PaymentSdkComponent, { injector });
     customElements.define('payment-sdk', customElement);
   }
   ngDoBootstrap() { }

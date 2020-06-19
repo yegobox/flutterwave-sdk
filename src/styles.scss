@@ -1,4 +1,4 @@
-@import '~bootstrap/scss/bootstrap';
+
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
@@ -15,3 +15,114 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 }
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.payment-button {
+    background-color: #1a73e8;
+    border-radius: 6px;
+    border: 0;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 13px;
+    letter-spacing: 0.25px;
+    font-weight: 500;
+    padding: 12px 18px;
+    color: #fff;
+    text-decoration: none;
+    text-align: center;
+    display: inline-block;
+  }
+
+  .dialog-sm {
+    width: 90%;
+    max-width: 300px !important;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    border-radius: 8px!important;
+    overflow: hidden!important;
+  }
+  
+  .dialog-md {
+    width: 90%;
+    max-width: 600px !important;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    border-radius: 8px!important;
+    overflow: hidden!important;
+  }
+  
+  .dialog-lg {
+    width: 90%;
+    max-width: 1200px !important;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    border-radius: 8px!important;
+    overflow: hidden!important;
+  }
+  
+  .dialog-full {
+    //height: 98%;
+    width: 100vw;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    border-radius: 8px!important;
+    overflow: hidden!important;
+  
+    .mat-dialog-container {
+      max-width: none;
+      font-family: Roboto, "Helvetica Neue", sans-serif;
+      border-radius: 8px!important;
+      overflow: hidden!important;
+    }
+  }
+  .button-default {
+    position: relative;
+    height: 40px;
+    min-width: 80px;
+    font-size: 14px;
+    line-height: 38px;
+    font-weight: 500;
+    user-select: none;
+    padding: 0px 16px;
+    cursor: pointer;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(174, 177, 181);
+    border-image: initial;
+    border-radius: 4px;
+    transition: background-color 0.2s ease-in-out 0s, color 0.2s ease-in-out 0s, opacity 0.2s ease-in-out 0s;
+  }
+  .button-default,
+  .button-default:hover {
+    background-color: rgb(255, 255, 255);
+    color: rgb(113, 118, 123);
+  }
+
+  .button--secondary {
+    color: #fff !important;
+    background: rgb(41, 150, 204)!important;
+    border:1px solid rgb(41, 150, 204)!important;
+  }
+  .button--success {
+    color: rgb(4, 160, 74) !important;
+    background: 0px 0px;
+    border-color: rgb(4, 160, 74) !important;
+  }
+  .button--dark {
+    color: rgb(27, 29, 28) !important;
+    background: 0px 0px;
+    border-color: rgb(27, 29, 28) !important;
+  }
+  .button--destructive {
+    color: rgb(217, 43, 43);
+    background: 0px 0px;
+    border-color: rgb(217, 43, 43);
+  }
+
+  .alertDanger {
+    padding: 2px;
+    background-color: #f44336;
+    color: white;
+    width:100%
+    }
+    .alertWarning {
+      padding: 2px;
+      background-color: orange;
+      color: white;
+      width:100%
+    }

@@ -1,0 +1,173 @@
+<mat-card style="background:none">
+    <loading-indicator [isVisible]="(loading | async)" class="overlay"></loading-indicator>
+  <mat-card-header style="background:none">
+
+    <div class="alertWarning" style="margin-right:20px;margin-bottom:10px"  role="alert" *ngIf="message.message && !message.error">
+   
+      <p style="padding:20px">{{message.message}}</p>
+    </div>
+
+    <div class="alertDanger"  style="margin-right:20px;margin-bottom:10px"  *ngIf="message.message && message.error" role="alert">
+     
+      <p style="padding:20px">{{message.message?message.message:'Something went wrong! try again!'}}</p>
+    </div>
+
+  
+  </mat-card-header>
+
+  <mat-card-content>
+    <mat-accordion class="example-headers-align" style="background:none">
+
+      <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
+        <mat-expansion-panel-header style="background:none">
+          <mat-panel-title>
+            <table>
+              <tr>
+                <td>
+                  <img [src]="'./assets/img/logo-mtn.png'" mat-card-avatar class="avatar" style="font-weight:bold">
+
+                </td>
+                <th> Pay with Mobile Money</th>
+              </tr>
+            </table>
+          </mat-panel-title>
+
+        </mat-expansion-panel-header>
+        <hr>
+
+
+        <form autocomplete="off" [formGroup]="buyForm" class="mt-3" (ngSubmit)="submitMomo()" style="background:none">
+
+
+
+          <mat-form-field appearance="outline" style="width:100%">
+            <mat-label>Enter mobile number</mat-label>
+            <input matInput formControlName="mobilephone" style="width:100%" placeholder="Enter mobile number">
+
+          </mat-form-field>
+
+          <mat-error *ngIf="mobilephone.invalid && (mobilephone.dirty || mobilephone.touched)" style="background:none">
+            <mat-error *ngIf="mobilephone.errors.required">
+              Mobile number is <strong>required</strong>
+            </mat-error>
+          </mat-error>
+
+         
+
+
+
+          <mat-card-actions class="mt-2" style="background:none">
+            <button type="submit" style="width:100%" class="button-default button--secondary" cdkFocusInitial
+              *ngIf="(loading | async)!=true">
+              <span>{{inputData.action}} {{inputData.amount}} {{inputData.currency}}</span>
+            </button>
+            <button type="button" style="width:100%" class="button-default button--secondary" cdkFocusInitial
+              [disabled]="(loading | async)" *ngIf="(loading | async)">
+              <span>Processing ....</span>
+            </button>
+          </mat-card-actions>
+        </form>
+
+
+      </mat-expansion-panel>
+
+      <mat-expansion-panel style="background:none" [expanded]="step === 1" (opened)="setStep(1)" hideToggle>
+        <mat-expansion-panel-header class="row">
+          <mat-panel-title class="col-9">
+
+            <table>
+              <tr>
+                <td>
+                  <img [src]="'./assets/img/visa.png'" mat-card-avatar class="avatar" style="font-weight:bold">
+                  <img [src]="'./assets/img/mastercard.png'" mat-card-avatar class="avatar" style="font-weight:bold">
+
+                </td>
+                <th> Pay with Credit Card</th>
+              </tr>
+            </table>
+          </mat-panel-title>
+
+
+        </mat-expansion-panel-header>
+<hr>
+<form autocomplete="off" [formGroup]="cardForm" class="mt-3" (ngSubmit)="submitCard()" style="background:none">
+
+
+
+    <mat-form-field appearance="outline" style="width:100%">
+      <mat-label>Enter Card Number:</mat-label>
+      <input matInput formControlName="cardNumber" style="width:100%" placeholder="Enter Card Number">
+
+    </mat-form-field>
+
+    <mat-error *ngIf="cardNumber.invalid && (cardNumber.dirty || cardNumber.touched)" style="background:none">
+        Card number invalid or missing.
+    </mat-error>
+    <table style="width: 100%;">
+        <tr>
+<td>
+    <mat-form-field appearance="outline" style="width:100%">
+        <mat-label>Enter Expiry Month:</mat-label>
+        <input matInput formControlName="expirationMonth" style="width:100%" placeholder="Enter Expiry Month">
+  
+      </mat-form-field>
+  
+      <mat-error *ngIf="expirationMonth.invalid && (expirationMonth.dirty || expirationMonth.touched)" style="background:none">
+        Expiry month invalid or missing.
+      </mat-error>
+
+</td>
+
+<td>
+    <mat-form-field appearance="outline" style="width:100%">
+        <mat-label>Enter Expiry Year:</mat-label>
+        <input matInput formControlName="expirationYear" style="width:100%" placeholder="Enter Expiry Year">
+  
+      </mat-form-field>
+  
+      <mat-error *ngIf="expirationYear.invalid && (expirationYear.dirty || expirationYear.touched)" style="background:none">
+        Expiry year invalid or missing.
+      </mat-error>
+
+</td>
+
+
+<td>
+    <mat-form-field appearance="outline" style="width:100%">
+        <mat-label>Enter Security Code:</mat-label>
+        <input matInput formControlName="ccv" style="width:100%" placeholder="Enter Security Code">
+  
+      </mat-form-field>
+  
+      <mat-error *ngIf="ccv.invalid && (ccv.dirty || ccv.touched)" style="background:none">
+        Security Code invalid or missing.
+      </mat-error>
+
+</td>
+
+        </tr>
+    </table>
+
+
+   
+
+
+
+    <mat-card-actions class="mt-2" style="background:none">
+      <button type="submit" style="width:100%" class="button-default button--secondary" cdkFocusInitial
+        *ngIf="(loading | async)!=true">
+        <span>{{inputData.action}} {{inputData.amount}} {{inputData.currency}}</span>
+      </button>
+      <button type="button" style="width:100%" class="button-default button--secondary" cdkFocusInitial
+        [disabled]="(loading | async)" *ngIf="(loading | async)">
+        <span>Processing ....</span>
+      </button>
+    </mat-card-actions>
+  </form>
+
+
+      </mat-expansion-panel>
+
+    </mat-accordion>
+  </mat-card-content>
+</mat-card>
