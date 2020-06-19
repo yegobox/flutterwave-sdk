@@ -44,14 +44,14 @@
                         <table style="width: 100%;" style="background:none">
           
                           <tr class="tr" [class.trIsFocused]="isFocused=='mobilephone'"
-                            style="border-top: 1px #d5d9dc solid; border-right: 1px #d5d9dc solid; border-left: 1px #d5d9dc solid;">
+                            >
           
                             <td class="td" [class.tdIsFocused]="isFocused=='mobilephone'">
                               Enter mobile number:
                               
                             </td>
-                            <td style="width:60%">
-                              <input type="text" class="input" formControlName="mobilephone" (focus)="focusing('mobilephone')"
+                            <td style="width:100%">
+                              <input type="text" class="input" formControlName="mobilephone" class="form-control" (focus)="focusing('mobilephone')"
                                 (focusout)="focusingOut()" autofocus placeholder="Enter mobile number" />
           
                             </td>
@@ -72,7 +72,7 @@
           
           
                         <mat-card-actions class="mt-2" style="background:none">
-                          <button type="submit" style="width:100%" class="button-default button--secondary" cdkFocusInitial
+                          <button type="submit" style="width:100%" class="btn btn-primary" cdkFocusInitial
                             *ngIf="(loading | async)!=true">
                             <span trans>Pay {{currency}}</span>
                           </button>
