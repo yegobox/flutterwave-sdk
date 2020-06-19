@@ -38,6 +38,8 @@ export class LocationComponent implements OnInit, OnChanges, AfterViewInit {
 
   message = { message: null, momo: null, error: false };
   isFocused: string = '';
+  payment_fonfirmed: boolean = false;
+  panding_payment: boolean = false;
 
   constructor(private modalService: NgbModal,
     private component: ChangeDetectorRef, 
@@ -184,47 +186,7 @@ export class LocationComponent implements OnInit, OnChanges, AfterViewInit {
     if (changes.origin) {
     }
   }
-  submitCard(data){
-    if(null == this.amount){
-      this.noAmountError = true;
-      this.component.markForCheck();
-      return;
-    }
-    const formSubscription = "cardno="+ data.cardNumber + 
-      "&expirymonth="+ data.expirationMonth +
-      "&expiryyear="+ data.expirationYear+
-      "&vcc="+ data.ccv+
-      "&email="+ "email@gmail.com"+
-      "&firstname="+ data.cardHolder+
-      "&lastname="+ data.cardHolder+
-      "&planid="+ "5422"+
-      "&appname="+ "FLIPPER"+
-      "&phone="+ "07888888888"+
-      "&transactionid="+ Date.now()+
-      "&amount="+ this.amount+
-      "&pay_type="+ "CARD"+
-      "&userId="+ "1";
-
-    let xhr = new XMLHttpRequest();
-    
-
-
-    xhr.open("POST", environment.paymentUrl+"charge", true);
-
-    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-
-    xhr.onload = (d) => {
-
-      // let json = JSON.parse(xhr.response);
-      console.log("payment response ....",xhr.response);
-      
-    };
-
-    
-
-    xhr.send(formSubscription);
-
-  }
+ 
 
   
   setStep(index: number) {
@@ -247,6 +209,61 @@ export class LocationComponent implements OnInit, OnChanges, AfterViewInit {
   }
   focusingOut() {
     this.isFocused = '';
+  }
+  submitCard(data){
+    if(null == this.amount){
+      this.noAmountError = true;
+      this.component.markForCheck();
+      return;
+    }
+    const formSubscription = "cardno="+ data.cardNumber + 
+      "&expirymonth="+ data.expirationMonth +
+      "&expiryyear="+ data.expirationYear+
+      "&vcc="+ data.ccv+
+      "&email="+ "email@gmail.com"+
+      "&firstname="+ data.cardHolder+
+      "&lastname="+ data.cardHolder+
+      "&planid="+ "5422"+
+      "&appname="+ "FLIPPER"+
+      "&phone="+ "07888888888"+
+      "&transactionid="+ Date.now()+
+      "&amount="+ this.amount+
+      "&pay_type="+ "CARD"+
+      "&userId="+ "1";
+
+    let xhr = new XMLHttpRequest();
+
+
+    xhr.open("POST", environment.paymentUrl+"charge", true);
+
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+    // 5531886652142950
+
+    xhr.onload = (d) => {
+
+      let json = JSON.parse(xhr.response);
+      
+      if(json.message.status == 'error'){
+        
+        this.message.error = true;
+        this.message.message = json.message.data.message;
+      }else if(json.message.status =="success"){
+          this.payment_fonfirmed = true;
+          this.component.markForCheck();
+      }else if(json.message.status =="pending"){
+        this.panding_payment = true;
+        this.component.markForCheck();
+      }else{
+        // in case we have card that needs verification. then we can call endPoint to verify the card here.
+        console.log("else",json);
+      }
+    };
+
+    
+
+    xhr.send(formSubscription);
+
   }
   submitMomo(){
     if(null == this.amount){
@@ -281,7 +298,13 @@ export class LocationComponent implements OnInit, OnChanges, AfterViewInit {
 
     xhr.onload = (d) => {
 
-      console.log("payment response ....",xhr.response);
+      let json = JSON.parse(xhr.response);
+      
+      if(json.message.status == 'error'){
+        
+        this.message.error = true;
+        this.message.message = json.message.data.message;
+      }
       
     };
 

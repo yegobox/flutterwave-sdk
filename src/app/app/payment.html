@@ -1,6 +1,6 @@
 <ng-template #content let-modal>
   
-    <div>
+    <div *ngIf="!payment_fonfirmed">
         <div >
           
             <section class="c-wrapper">
@@ -120,6 +120,15 @@
             </section>
           
           </div>
+    </div>
+    <div *ngIf="payment_fonfirmed">
+        <p>Payment confirmed you can click anywhere on this page to close the model</p>
+    </div>
+    <div *ngIf="panding_payment">
+        <p>Card that need verification are not implemented.</p>
+        <!-- <form>
+            <input>
+        </form> -->
     </div>
 </ng-template>
 
