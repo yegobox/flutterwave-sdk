@@ -5,26 +5,39 @@ import { HttpClient } from "@angular/common/http";
 import { BehaviorSubject } from "rxjs";
 import { environment } from "src/environments/environment";
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+
 
 @Component({
+
   selector: "payment-sdk",
   styleUrls:['style.scss'],
   templateUrl:"payment.html",
-  encapsulation: ViewEncapsulation.ShadowDom
+  encapsulation: ViewEncapsulation.ShadowDom,
+  // animations: [
+  //   trigger('insertLogin', [
+  //     transition(':enter', useAnimation(fadeInAnimation, { params: { duration: '1s' } }))
+  //   ]),
+  // ],
 })
 export class LocationComponent implements OnInit, OnChanges, AfterViewInit {
 
   showCard;
   currency:string;
-  
-  
-  loading:boolean = false;
+  buyForm: FormGroup;
+  public loading = new BehaviorSubject(false);
+ 
   public ccNumMissingTxt = new BehaviorSubject("CCV number is required");
   public cardExpiredTxt = new BehaviorSubject("Card has expired");
 
   @Input() public simulating: string;
   @Input() public shouldpop: any;
   noAmountError: boolean = false;
+  step: any = 0;
+  flipperPlan = 400;
+
+  message = { message: null, momo: null, error: false };
+  isFocused: string = '';
 
   constructor(private modalService: NgbModal,
     private component: ChangeDetectorRef, 
@@ -105,6 +118,11 @@ export class LocationComponent implements OnInit, OnChanges, AfterViewInit {
       longitude: this.destlongitude
     } as ILatLng;
     this._zoom = parseInt(this.zoom);
+
+    this.buyForm = new FormGroup({
+      mobilephone: new FormControl('', [Validators.required]),
+    });
+    
   }
   ngAfterViewInit(): void {
     console.log(this.action);
@@ -208,4 +226,33 @@ export class LocationComponent implements OnInit, OnChanges, AfterViewInit {
 
     console.log(formSubscription);
   }
+
+  
+  setStep(index: number) {
+    this.step = index;
+  }
+
+  nextStep() {
+    this.step++;
+  }
+
+  prevStep() {
+    this.step--;
+  }
+  get mobilephone() {
+    return this.buyForm.get('mobilephone');
+  }
+  focusing(value: any) {
+    this.isFocused = value;
+    this.buyForm.controls.mobilephone.setValue('');
+  }
+  focusingOut() {
+    this.isFocused = '';
+  }
+  submitMomo(){
+
+  }
+  // get amount() {
+  //   return this.buyForm.get('amount');
+  // }
 }

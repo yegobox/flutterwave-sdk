@@ -1,3 +1,17 @@
 @import '~bootstrap/scss/bootstrap';
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.mat-card {
+    /* background: #424242; */
+    color: #fff;
+}
+.mat-expansion-panel {
+    background:none;
+}
+
+.mat-expansion-panel {
+    background: none;
+}
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

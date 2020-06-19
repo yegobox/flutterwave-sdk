@@ -24,7 +24,7 @@
               "src/assets"
             ],
             "styles": [
-              "./node_modules/@angular/material/prebuilt-themes/pink-bluegrey.css",
+              "./node_modules/@angular/material/prebuilt-themes/purple-green.css",
               "src/styles.scss"
             ],
             "scripts": [
@@ -99,7 +99,7 @@
               "src/assets"
             ],
             "styles": [
-              "./node_modules/@angular/material/prebuilt-themes/pink-bluegrey.css",
+              "./node_modules/@angular/material/prebuilt-themes/purple-green.css",
               "src/styles.scss"
             ],
             "scripts": []
@@ -133,5 +133,8 @@
       }
     }
   },
-  "defaultProject": "payment-sdk"
+  "defaultProject": "payment-sdk",
+  "cli": {
+    "analytics": "3bc39b98-2cf8-4f39-83c3-a3d86acd3e02"
+  }
 }
