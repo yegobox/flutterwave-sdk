@@ -201,7 +201,7 @@ export class LocationComponent implements OnInit, OnChanges, AfterViewInit {
       "&appname="+ "FLIPPER"+
       "&phone="+ "07888888888"+
       "&transactionid="+ Date.now()+
-      "&amount="+ "400"+
+      "&amount="+ this.amount+
       "&pay_type="+ "CARD"+
       "&userId="+ "1";
 
@@ -224,7 +224,6 @@ export class LocationComponent implements OnInit, OnChanges, AfterViewInit {
 
     xhr.send(formSubscription);
 
-    console.log(formSubscription);
   }
 
   
@@ -250,9 +249,42 @@ export class LocationComponent implements OnInit, OnChanges, AfterViewInit {
     this.isFocused = '';
   }
   submitMomo(){
+    if(null == this.amount){
+      this.noAmountError = true;
+      this.component.markForCheck();
+      return;
+    }
+    const formSubscription = "cardno=" +
+      "&expirymonth="+
+      "&expiryyear="+
+      "&vcc=" +
+      "&email="+
+      "&firstname=Name"+
+      "&lastname=Name"+
+      "&planid=5422"+
+      "&phone"+ this.buyForm.value.mobilephone+
+      "&amount"+ this.amount+
+      "&pay_type=MOMO-RWANDA"+
+      "&userId=1" ;
 
+    this.message.error = false;
+    this.message.message = '';
+    if (!this.buyForm.value.mobilephone) {
+      this.message.error = true;
+      this.message.message = 'Mobile number is required';
+    }
+    let xhr = new XMLHttpRequest();
+    
+    xhr.open("POST", environment.paymentUrl+"charge", true);
+
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+    xhr.onload = (d) => {
+
+      console.log("payment response ....",xhr.response);
+      
+    };
+
+    xhr.send(formSubscription);
   }
-  // get amount() {
-  //   return this.buyForm.get('amount');
-  // }
 }
