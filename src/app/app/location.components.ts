@@ -243,7 +243,7 @@ export class LocationComponent implements OnInit, OnChanges, AfterViewInit {
     xhr.onload = (d) => {
 
       let json = JSON.parse(xhr.response);
-      
+      if(json ==null)return;
       if(json.message.status == 'error'){
         
         this.message.error = true;
