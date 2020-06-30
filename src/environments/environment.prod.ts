@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  paymentUrl:'https://decidex-prod.herokuapp.com/'
+  paymentUrl:'  https://mighty-hamlet-20200.herokuapp.com/'
 };

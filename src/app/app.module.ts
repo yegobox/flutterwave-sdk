@@ -57,5 +57,6 @@ export class AppModule {
     const customElement = createCustomElement(PaymentSdkComponent, { injector });
     customElements.define('payment-sdk', customElement);
   }
+  
   ngDoBootstrap() { }
 }

@@ -96,13 +96,10 @@ export class PaymentComponent implements OnInit {
       this.component.markForCheck();
       return;
     }
-    console.log('hhh');
+    
     this.message.error = false;
     this.message.message = '';
-    // if (this.cardForm.invalid) {
-    //   this.component.markForCheck();
-    //   return;
-    // }
+   
     const formSubscription = "cardno="+ this.cardForm.value.cardNumber + 
       "&expirymonth="+ this.cardForm.value.expirationMonth +
       "&expiryyear="+ this.cardForm.value.expirationYear+
@@ -111,13 +108,14 @@ export class PaymentComponent implements OnInit {
       "&firstname="+ this.cardForm.value.cardHolder+
       "&lastname="+ this.cardForm.value.cardHolder+
       "&planid="+ "5422"+
-      "&appname="+ "FLIPPER"+
+      "&appname="+ "DECIDEX"+
+      "&currency="+ "RWF"+
       "&phone="+ "07888888888"+
       "&transactionid="+ Date.now()+
       "&amount="+ this.inputData.amount+
       "&pay_type="+ "CARD"+
       "&userId="+ "1";
-// console.log(formSubscription);
+
     let xhr = new XMLHttpRequest();
 
     this.loading.next(true);
@@ -130,7 +128,8 @@ export class PaymentComponent implements OnInit {
     xhr.onload = (d) => {
       this.loading.next(false);
       let json = JSON.parse(xhr.response);
-      // console.log(xhr.response);
+      
+      console.log("then on Response:",json);
       
       if(json.message.status == 'error'){
         this.message.error = true;
@@ -142,7 +141,6 @@ export class PaymentComponent implements OnInit {
             this.message.message = 'Card has expired';
           }
 
-       
         if(null !=json.message.data){
           this.message.message = json.message.data.message;
         }else if(null !=json.message.message){
@@ -221,15 +219,16 @@ export class PaymentComponent implements OnInit {
      
       this.loading.next(false);
       let json = JSON.parse(xhr.response);
+      console.log("submit the momo",json);
       
       if(json.message.status == 'error'){
         
         this.message.error = true;
         this.message.message = json.message.data.message;
       }else if(json.message.status == 'success' && json.message.message == 'Momo initiated'){
-        
-        this.message.error = true;
-        this.message.message = 'Sorry, Mobile money is not working! please use credit card!';
+        location.href = json.message.data.link;
+        // this.message.error = true;
+        // this.message.message = 'Sorry, Mobile money is not working! please use credit card!';
       }
       
     else{

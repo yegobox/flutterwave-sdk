@@ -4,8 +4,7 @@
 
 export const environment = {
   production: false,
-  paymentUrl:'https://decidex-dev.herokuapp.com/'
-
+  paymentUrl:'  https://mighty-hamlet-20200.herokuapp.com/'
 };
 
 /*
