@@ -9,7 +9,9 @@ import { DialogSize, DialogService } from '@enexus/flipper-dialog';
 })
 export class PaymentSdkComponent implements OnInit {
 
-  @Input() amount: any = 0.00;
+  
+  @Input() public enablemomo: string;
+  @Input()  amount: any = 0.00;
   @Input() action: string = "Pay";
   @Input() currency: string = "RWF";
   @Input() showbutton: any = false;
@@ -18,12 +20,15 @@ export class PaymentSdkComponent implements OnInit {
   @Output() payamentDetails = new EventEmitter<{ data: any, status: string }>();
   @Input() class: string = 'payment-button';
 
+
   constructor(public dialog: DialogService) { }
 
   ngOnInit(): void {
+   
     this.data = {
       amount: this.amount,
       action: this.action,
+      enableMomo:this.enablemomo,
       currency: this.currency
     };
   }

@@ -6,22 +6,15 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
   templateUrl: './payment-sdk-modal.component.html',
   styleUrls: ['./payment-sdk-modal.component.css']
 })
-export class PaymentSdkModalComponent implements OnInit {
-  
+export class PaymentSdkModalComponent {
 
   constructor(
     public dialogRef: MatDialogRef<PaymentSdkModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) {
-      dialogRef.disableClose = true;
-     }
-
-  ngOnInit(): void {
-  
-  }
-  payamentDetails(event){
-      this.dialogRef.close(event);
+    dialogRef.disableClose = true;
   }
 
-
-
+  payamentDetails(event) {
+    this.dialogRef.close(event);
+  }
 }
