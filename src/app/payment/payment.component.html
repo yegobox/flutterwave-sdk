@@ -1,6 +1,6 @@
 <mat-card style="background:none">
-  <loading-indicator [isVisible]="(loading | async)" class="overlay"></loading-indicator>
-  <mat-card-header style="background:none">
+  <loading-indicator *ngIf="!(allowOptVerification || paymentMadeSuccess)" [isVisible]="(loading | async)" class="overlay"></loading-indicator>
+  <mat-card-header *ngIf="!(allowOptVerification || paymentMadeSuccess)" style="background:none">
 
     <div class="alertWarning" style="margin-right:20px;margin-bottom:10px" role="alert"
       *ngIf="message.message && !message.error">
@@ -17,7 +17,7 @@
 
   </mat-card-header>
 
-  <mat-card-content>
+  <mat-card-content *ngIf="!(allowOptVerification || paymentMadeSuccess)">
     <mat-accordion class="example-headers-align" style="background:none">
 
       
@@ -125,6 +125,8 @@
 
               </td>
 
+            </tr>
+            <tr>
               <td>
                 <mat-form-field appearance="outline" style="width:100%">
                   <mat-label>Enter Expiry Year:</mat-label>
@@ -139,7 +141,9 @@
 
               </td>
 
-
+            </tr>
+            <tr>
+              
               <td>
                 <mat-form-field appearance="outline" style="width:100%">
                   <mat-label>Enter Security Code:</mat-label>
@@ -178,4 +182,14 @@
 
     </mat-accordion>
   </mat-card-content>
+
+  <mat-card-content *ngIf="allowOptVerification && !paymentMadeSuccess">
+    <validate-opt-card *ngIf="jsonResponseData" [data]="jsonResponseData"
+     (response)="payamentResponse($event)"></validate-opt-card>
+  </mat-card-content>
+
+  <mat-card-content *ngIf="!allowOptVerification && paymentMadeSuccess">
+    <paid-success></paid-success>
+  </mat-card-content>
+  
 </mat-card>

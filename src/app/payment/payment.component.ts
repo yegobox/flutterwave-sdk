@@ -1,7 +1,10 @@
-import { Component, OnInit, ChangeDetectorRef, Inject, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, Inject, Input, Output, EventEmitter, SecurityContext } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
+import { HttpHeaders, HttpClient } from '@angular/common/http';
+import { finalize } from 'rxjs/operators';
+import { DomSanitizer } from '@angular/platform-browser';
 
 
 @Component({
@@ -20,10 +23,19 @@ export class PaymentComponent implements OnInit {
   payment_fonfirmed: boolean;
   panding_payment: boolean;
   public loading = new BehaviorSubject(false);
+  jsonResponseData:any;
+
   @Input() inputData: any;
   cardForm: FormGroup;
-  @Output() payamentDetails = new EventEmitter < {data:any,status:string} > ();
+  allowOptVerification:boolean=false;
+  paymentMadeSuccess:boolean=false;
+
+  @Output() response = new EventEmitter < {data:any,status:string} > ();
+
+  verifyForm: FormGroup;
   constructor(
+    private sanitizer: DomSanitizer,
+    private httpClient: HttpClient,
     private component: ChangeDetectorRef
     ) { }
 
@@ -31,6 +43,7 @@ export class PaymentComponent implements OnInit {
     this.buyForm = new FormGroup({
       mobilephone: new FormControl('', [Validators.required]),
     });
+
     this.cardForm = new FormGroup({
       cardNumber: new FormControl('', [Validators.required,Validators.pattern('^[0-9]*$')]),
       cardHolder: new FormControl('', [Validators.required]),
@@ -50,6 +63,10 @@ export class PaymentComponent implements OnInit {
         Validators.maxLength(4)
       ]),
     });
+
+    // Verification card
+
+  
   }
   get cardNumber() {
     return this.cardForm.get('cardNumber');
@@ -90,7 +107,9 @@ export class PaymentComponent implements OnInit {
   }
 
   submitCard(){
-   
+    this.allowOptVerification=false;
+    this.paymentMadeSuccess=false;
+
     if(null == this.inputData.amount){
       this.noAmountError = true;
       this.component.markForCheck();
@@ -114,23 +133,26 @@ export class PaymentComponent implements OnInit {
       "&transactionid="+ Date.now()+
       "&amount="+ this.inputData.amount+
       "&pay_type="+ "CARD"+
-      "&userId="+ "1";
+      "&userId="+ "1"+
+      "&redirect_url="+this.sanitizer.sanitize(SecurityContext.RESOURCE_URL, this.sanitizer.bypassSecurityTrustResourceUrl(this.inputData.redirecturl));
 
-    let xhr = new XMLHttpRequest();
 
     this.loading.next(true);
-    xhr.open("POST", environment.paymentUrl+"charge", true);
 
-    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    const headers = new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+    'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Credentials': '*'});
 
-    // 5531886652142950
 
-    xhr.onload = (d) => {
+    return this.httpClient
+    .post(environment.paymentUrl+'charge',formSubscription,{headers}).
+    pipe(finalize(() => this.loading.next(false)))
+    .subscribe(res  => {
       this.loading.next(false);
-      let json = JSON.parse(xhr.response);
-      
-      console.log("then on Response:",json);
-      
+
+      const json =res as any;
+
+      // console.log(json);
+
       if(json.message.status == 'error'){
         this.message.error = true;
 
@@ -142,44 +164,51 @@ export class PaymentComponent implements OnInit {
           }
 
         if(null !=json.message.data){
-          this.message.message = json.message.data.message;
+              this.message.message = json.message.data.message;
         }else if(null !=json.message.message){
-          this.message.message = json.message.message;
+             this.message.message = json.message.message;
         }
-        
+        this.response.emit({status:'error',data:json.message.data});
+
       }else if(json.message.status =="success"){
-        this.message.error = false;
-          this.message.message = 'Card has expired';
           
+        this.message.error = false;
+          
+        // console.log(json.message.data);
           if (json.message.data.status === 'approved'
           || json.message.data.status === 'successful'
           || json.message.data.status === 'Approved'
           || json.message.data.status === 'Successful') {
-          // return this.saveExpiredDate();
-          this.payamentDetails.emit({status:'successful',data:json.message.data});
+            this.paymentMadeSuccess=true;
+          this.response.emit({status:'success',data:json.message.data});
+
         } else {
-          this.message.error = false;
-          this.message.message = json.message.data.chargeResponseMessage;
-          this.payamentDetails.emit({status:'successful',data:json.message.data});
-          // this.openValidateCardDialog(json.message.data);
+          this.openValidateCardDialog(json.message.data);
         }
           
-          this.component.markForCheck();
-      }else if(json.message.status =="pending"){
-        this.panding_payment = true;
-        this.component.markForCheck();
-        // this.payamentDetails.emit({status:'pending',data:json.message.data});
-      }else{
-        // in case we have card that needs verification. then we can call endPoint to verify the card here.
-        console.log("else",json);
-        // this.payamentDetails.emit({status:'failed',data:json.message.data});
+        
+      } else if(json.message.status =="pending"){
+        this.message.error = false;
+        this.response.emit({status:'pending',data:json.message.data});
+        this.openValidateCardDialog(json.message.data);
       }
-    };
 
+      this.component.markForCheck();
+
+    }, error => {
+      this.loading.next(false);
+      this.message.error = true;
+      const response =error as any;
+      this.message.message = response.message.message as any;
+    });
     
+  
 
-    xhr.send(formSubscription);
-
+  }
+  openValidateCardDialog(data:any){
+        this.allowOptVerification=true;
+        this.jsonResponseData=data;
+        this.component.markForCheck();
   }
   submitMomo(){
     if(null == this.inputData.amount){
@@ -187,6 +216,8 @@ export class PaymentComponent implements OnInit {
       this.component.markForCheck();
       return;
     }
+    // console.log(this.inputData.redirecturl);
+
     const formSubscription = "cardno=" +
       "&expirymonth="+
       "&expiryyear="+
@@ -199,9 +230,12 @@ export class PaymentComponent implements OnInit {
       "&amount="+ this.inputData.amount+
       "&pay_type=MOMO-RWANDA"+
       "&appname=DOMAINS"+
-      "&transactionid=12345"+
-      "&userId=1" ;
+      "&transactionid=decidex12345"+
+      "&currency="+this.inputData.currency+
+      "&userId=1"+
+      "&redirect_url="+this.sanitizer.sanitize(SecurityContext.RESOURCE_URL, this.sanitizer.bypassSecurityTrustResourceUrl(this.inputData.redirecturl));
      
+ console.log(formSubscription);
 
     this.message.error = false;
     this.message.message = '';
@@ -219,30 +253,32 @@ export class PaymentComponent implements OnInit {
      
       this.loading.next(false);
       let json = JSON.parse(xhr.response);
-      console.log("submit the momo",json);
+      // console.log("submit the momo",json);
       
       if(json.message.status == 'error'){
         
         this.message.error = true;
         this.message.message = json.message.data.message;
-      }else if(json.message.status == 'success' && json.message.message == 'Momo initiated'){
-        location.href = json.message.data.link;
-        // this.message.error = true;
-        // this.message.message = 'Sorry, Mobile money is not working! please use credit card!';
+
+      }else  if (json.message.status === 'success') {
+        this.message.error = false;
+        if(json.message.meta && json.message.meta.authorization && json.message.meta.authorization.mode=='redirect'){
+             return window.location.href= json.message.meta.authorization.redirect;
+          }
       }
-      
-    else{
-      this.message.error = false;
-      this.message.message = json.message.data.chargeResponseMessage;
     }
-  }
     xhr.send(formSubscription);
 
     
   }
 
+  
+
   close(){
 
+  }
+  payamentResponse(event) {
+    this.response.emit(event);
   }
 
 }

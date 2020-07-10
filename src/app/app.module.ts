@@ -20,6 +20,8 @@ import { DialogModule } from '@enexus/flipper-dialog';
 import { PaymentComponent } from './payment/payment.component';
 import { MatInputModule } from '@angular/material/input'
 import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator.component';
+import { CardValidationComponent } from './app/validate-card/validate-card.component';
+import { PaidSuccessComponent } from './app/paid-success/paid-success.component';
 
 @NgModule({
   imports: [BrowserModule,
@@ -47,7 +49,9 @@ import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator
     LocationComponent,
     PaymentSdkComponent,
     PaymentSdkModalComponent,
-    PaymentComponent
+    PaymentComponent,
+    CardValidationComponent,
+    PaidSuccessComponent
   ],
   entryComponents: [PaymentSdkModalComponent],
 })

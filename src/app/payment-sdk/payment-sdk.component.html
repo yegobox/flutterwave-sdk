@@ -2,6 +2,7 @@
 <div *ngIf="showbutton=='true' || showbutton==true">
     <button class="{{class}}" (click)="openDialog()">{{action}} {{amount|currency:'RWF'}}</button>
 </div>
+
 <div *ngIf="showbutton=='false' || showbutton==false">
-    <payment [inputData]="data" (payamentDetails)="payamentData($event)"></payment>
+    <payment [inputData]="data" (response)="payamentResponse($event)"></payment>
 </div>

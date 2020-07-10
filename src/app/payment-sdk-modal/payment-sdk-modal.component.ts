@@ -14,7 +14,13 @@ export class PaymentSdkModalComponent {
     dialogRef.disableClose = true;
   }
 
-  payamentDetails(event) {
-    this.dialogRef.close(event);
+  payamentResponse(event) {
+
+    if(event.status=='successful' || event.status=='success'){
+      setTimeout(()=> {
+        this.dialogRef.close(event);
+      },this.data.timeout);
+    }
+   
   }
 }

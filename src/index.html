@@ -20,9 +20,18 @@
   <payment-sdk  
   enablemomo='true'
   showbutton='false' modal="md" 
-  amount='300' 
+  amount='100' 
   action='Donate' 
+  timeout="1000"
+  enableredirect="true"
+  redirecturl="https://misscareerafrica.org/donate"
   ></payment-sdk>
 </body>
+
+<script>
+const el = document.querySelector('payment-sdk');
+
+el.addEventListener('response', (event) => console.log("html",event.detail));
+</script>
 
 </html>

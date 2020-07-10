@@ -16,10 +16,22 @@
 </style>
 <body class="mat-typography" style="margin:200px">
 
-  <payment-sdk  showbutton='false' modal="md" 
-  amount='400' 
+
+  <payment-sdk  
+  enablemomo='true'
+  showbutton='false' modal="md" 
+  amount='100' 
   action='Donate' 
+  timeout="1000"
+  enableredirect="true"
+  redirecturl="https://misscareerafrica.org/donate"
   ></payment-sdk>
 <script src="runtime-es2015.js" type="module"></script><script src="runtime-es5.js" nomodule defer></script><script src="polyfills-es5.js" nomodule defer></script><script src="polyfills-es2015.js" type="module"></script><script src="scripts.js" defer></script><script src="main-es2015.js" type="module"></script><script src="main-es5.js" nomodule defer></script></body>
+
+<script>
+const el = document.querySelector('payment-sdk');
+
+el.addEventListener('response', (event) => console.log("html",event.detail));
+</script>
 
 </html>

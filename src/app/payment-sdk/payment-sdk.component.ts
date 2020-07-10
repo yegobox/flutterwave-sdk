@@ -1,6 +1,7 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SecurityContext } from '@angular/core';
 import { PaymentSdkModalComponent } from '../payment-sdk-modal/payment-sdk-modal.component';
 import { DialogSize, DialogService } from '@enexus/flipper-dialog';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'payment-sdk',
@@ -14,14 +15,19 @@ export class PaymentSdkComponent implements OnInit {
   @Input()  amount: any = 0.00;
   @Input() action: string = "Pay";
   @Input() currency: string = "RWF";
+  @Input() redirecturl: string = "";
   @Input() showbutton: any = false;
+  @Input() enableredirect: any = false || 'false';
+  @Input() timeout: any = 3000;
   @Input() modal: any = 'md';
   data: any;
-  @Output() payamentDetails = new EventEmitter<{ data: any, status: string }>();
+
+  @Output() response = new EventEmitter<{ data: any, status: string }>();
+
   @Input() class: string = 'payment-button';
 
 
-  constructor(public dialog: DialogService) { }
+  constructor(public dialog: DialogService,private sanitizer: DomSanitizer) { }
 
   ngOnInit(): void {
    
@@ -29,7 +35,9 @@ export class PaymentSdkComponent implements OnInit {
       amount: this.amount,
       action: this.action,
       enableMomo:this.enablemomo,
-      currency: this.currency
+      currency: this.currency,
+      redirecturl:this.redirecturl,
+      timeout:parseInt(this.timeout)
     };
   }
   openDialog() {
@@ -48,15 +56,29 @@ export class PaymentSdkComponent implements OnInit {
 
     return this.dialog.open(PaymentSdkModalComponent, model, this.data)
       .subscribe(result => {
-        if (result) {
-          this.payamentDetails.emit(result);
+            if (result) {
+              this.payamentResponse(result);
+            }
+
+      });
+  }
+
+
+      payamentResponse(event) {
+
+        this.response.emit(event);
+
+        if(this.enableredirect=='true' || this.enableredirect==true){
+          if(event.status=='successful' || event.status=='success'){
+
+            setTimeout(()=> {
+              return window.location.href=this.sanitizer.sanitize(SecurityContext.RESOURCE_URL, this.sanitizer.bypassSecurityTrustResourceUrl(this.redirecturl));
+            },parseInt(this.timeout));
+          
+        
         }
+        }
+       
+    }
 
-      }
-
-      );
-  }
-  payamentData(event) {
-    this.payamentDetails.emit(event);
-  }
 }
