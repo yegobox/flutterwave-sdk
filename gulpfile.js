@@ -13,4 +13,4 @@ gulp.task('rename', function () {
         .pipe(gulp.dest('./elements'));
 });
 
-gulp.task('default', ['concat', 'rename']);
+gulp.task('default', gulp.parallel('concat', 'rename'));

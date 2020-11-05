@@ -38,8 +38,10 @@ export class PaymentComponent implements OnInit {
     private httpClient: HttpClient,
     private component: ChangeDetectorRef
     ) { }
+    
 
   ngOnInit(): void {
+
     this.buyForm = new FormGroup({
       mobilephone: new FormControl('', [Validators.required]),
     });
@@ -132,6 +134,8 @@ export class PaymentComponent implements OnInit {
       "&phone="+ "07888888888"+
       "&transactionid="+ Date.now()+
       "&amount="+ this.inputData.amount+
+      "&is_creator_account="+ this.inputData.is_creator_account+
+      "&account_id="+ this.inputData.account_id+
       "&pay_type="+ "CARD"+
       "&userId="+ "1"+
       "&redirect_url="+this.sanitizer.sanitize(SecurityContext.RESOURCE_URL, this.sanitizer.bypassSecurityTrustResourceUrl(this.inputData.redirecturl));

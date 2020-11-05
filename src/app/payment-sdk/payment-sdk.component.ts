@@ -13,10 +13,13 @@ export class PaymentSdkComponent implements OnInit {
   
   @Input() public enablemomo: string;
   @Input()  amount: any = 0.00;
+  @Input()  account_id: string = '';
   @Input() action: string = "Pay";
   @Input() currency: string = "RWF";
   @Input() redirecturl: string = "";
   @Input() showbutton: any = false;
+  @Input() is_creator_account: any = false || 'false';
+
   @Input() enableredirect: any = false || 'false';
   @Input() timeout: any = 3000;
   @Input() modal: any = 'md';
@@ -37,6 +40,9 @@ export class PaymentSdkComponent implements OnInit {
       enableMomo:this.enablemomo,
       currency: this.currency,
       redirecturl:this.redirecturl,
+      account_id:this.account_id,
+      is_creator_account:this.is_creator_account,
+
       timeout:parseInt(this.timeout)
     };
   }
