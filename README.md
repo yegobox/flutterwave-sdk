@@ -14,6 +14,7 @@ is_creator_account -
 account_id - it should be string(you should request from Yegobox) 
 enableredirect - when you enabled redirect you should add redirect url also
 redirecturl - you should provide redirect url, when payment is done will redirect to that url you provided. 
+class - css class name when you want to change the button color, background or font
 ````
 ELEMENT
 
@@ -42,7 +43,7 @@ How to use it.
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<link rel="stylesheet" href="ttps://yegobox/sdk/styles.css">
+  <link rel="stylesheet" href="https://yegobox.com/sdk/styles.css">
 <style>
   .button1{
     background-color: brown;
@@ -60,6 +61,7 @@ How to use it.
   is_creator_account="false",
   account_id=""
   enableredirect="true"
+  class="btn"
   redirecturl="https://yegobox.com/"
   ></payment-sdk>
 <script src="https://yegobox.com/sdk/payment-sdk.js" type="text/javascript"></script>
